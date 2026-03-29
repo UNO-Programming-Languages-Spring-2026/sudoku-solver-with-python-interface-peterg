@@ -8,7 +8,21 @@ class Sudoku:
 
     def __str__(self) -> str:
         s = ""
-        # YOUR CODE HERE
+        keylist = sorted(list(self.sudoku.keys()))
+        # This is hideous
+
+        for key in keylist:
+            if ( key[1] == 9 ): # End of table
+                s = s + f"{self.sudoku.get(key)}"
+                if key[0]%3 == 0: # Pop in an extra newline for vertical subgrid
+                    s = s + "\n"
+                s = s + "\n"
+            elif ( key[1]%3 == 0 ) and (key[1] != 9): # horizontal subgrid
+                s = s + f"{self.sudoku.get(key)} "
+                s = s + " "
+            else: # Normal num
+                s = s + f"{self.sudoku.get(key)} "
+
         return s
 
     @classmethod
