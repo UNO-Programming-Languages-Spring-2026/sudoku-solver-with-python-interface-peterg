@@ -28,7 +28,9 @@ class Sudoku:
     @classmethod
     def from_str(cls, s: str) -> "Sudoku":
         sudoku = {}
-        # YOUR CODE HERE
+        temp = s.split(sep=' ')
+        for data in temp:
+            
         return cls(sudoku)
 
     @classmethod
