@@ -28,9 +28,17 @@ class Sudoku:
     @classmethod
     def from_str(cls, s: str) -> "Sudoku":
         sudoku = {}
-        temp = s.split(sep=' ')
-        for data in temp:
-            
+        # Split into rows
+        temp = s.split(sep="\n")
+        # Split string into col items and remove empty lists caused by extra newlines
+        temp = [ line.split() for line in temp if not not line ] 
+        # Probably could have done this all in the same loop.
+        for i in range( len(temp) ):
+            for j in range( len(temp[i]) ):
+                if (temp[i][j]) != '-':
+                    sudoku[i+1,j+1] = int(temp[i][j]) # bump index for base 1
+                else:
+                    pass
         return cls(sudoku)
 
     @classmethod
