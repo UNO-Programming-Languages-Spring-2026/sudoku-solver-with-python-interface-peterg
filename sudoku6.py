@@ -6,15 +6,14 @@ from sudoku_board import Sudoku
 class Context:
 
     def __init__(self, board: Sudoku):
-        self.__initial = board.sudoku
+        self.board = board.sudoku
+        self.__initial = []
 
     def initial(self) -> list[clingo.symbol.Symbol]:
 
-        stuff = [ clingo.Tuple_((clingo.Number(x[0]), clingo.Number(x[1]), clingo.Number(v))) \
-                 for x,v in self.__initial.items() ]
-        return stuff
+        return [ clingo.Tuple_((clingo.Number(x), clingo.Number(y), clingo.Number(self.board[x,y]))) \
+                  for x,y in self.board]
 
-        # YOUR CODE HERE
 
 class ClingoApp(clingo.application.Application):
     def print_model(self, model: clingo.Model, printer: Callable[[], None]) -> None:
@@ -22,12 +21,17 @@ class ClingoApp(clingo.application.Application):
         print(sudoku_obj)
 
     def main(self, ctl, files):
-        for f in files:
-            ctl.load(f)
-        if not files:
-            ctl.load("-")
         ctl.load("./sudoku.lp")
-        ctl.ground()
+        ctl.load("./sudoku_py.lp")
+        if files: # Unpack each and save contents to dict
+            with open(files[0],"r") as f:
+                contents = f.read()
+                board = Sudoku.from_str(contents)
+                print(contents)
+        else:
+            raise ValueError("No input")
+        context = Context(board)
+        ctl.ground([("base", [])], context)
         ctl.solve()
 
 
