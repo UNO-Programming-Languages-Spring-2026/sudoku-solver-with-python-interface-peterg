@@ -1,1 +1,1 @@
-initial(a,b,c) :- (a,b,c) = @initial().
+initial(A,B,C) :- (A,B,C) = @initial().
